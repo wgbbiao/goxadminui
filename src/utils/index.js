@@ -114,7 +114,7 @@ export function param2Obj(url) {
 export function buildParams(params) {
   var p = {}
   for (const key in params) {
-    if (['page', '__all__', 'o'].includes(key)) {
+    if (['page', '__all__', 'o', 'preloads'].includes(key)) {
       p[key] = params[key]
     } else {
       if (params.hasOwnProperty(key)) {
@@ -138,7 +138,7 @@ export function GetFormDataFromRes(res, _exclude) {
     exclude.push(..._exclude)
   }
   Object.entries(res).forEach(([key, value]) => {
-    if (_exclude.indexOf(key) === -1) {
+    if (exclude.indexOf(key) === -1) {
       if (Array.isArray(value)) {
         const vs = []
         value.forEach(v => {
@@ -148,12 +148,19 @@ export function GetFormDataFromRes(res, _exclude) {
             return
           }
         })
-        formData[key] = vs
+        if (vs.length > 0) {
+          formData[key] = vs
+        } else {
+          // const vs = []
+          // value.forEach(v => {
+          //   vs.push(GetFormDataFromRes(v, _exclude))
+          // })
+          formData[key] = value
+        }
       } else {
         formData[key] = value
       }
     }
   })
-
   return formData
 }

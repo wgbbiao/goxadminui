@@ -16,10 +16,11 @@ export function xadminCreate(path, data) {
   })
 }
 
-export function xadminGetOne(path, pk) {
+export function xadminGetOne(path, pk, params) {
   return request({
     url: path + '/' + pk,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 export function xadminUpdate(path, id, data) {

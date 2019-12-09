@@ -27,6 +27,7 @@ import EleForm from 'vue-ele-form'
 import EleFormQuillEditor from 'vue-ele-form-quill-editor'
 import EleFormImageUploader from 'vue-ele-form-image-uploader'
 
+import UserAutocomplate from '@/components/Xadmin/UserAutocomplate'
 Vue.use(EleForm, {
   'quill-editor': {
     // 比如设置上传 action 后, 所有的 quill-editor 编辑器上传图片都会采用这个属性
@@ -43,6 +44,7 @@ Vue.use(EleForm, {
 })
 Vue.component('quill-editor', EleFormQuillEditor)
 Vue.component('image-uploader', EleFormImageUploader)
+Vue.component(UserAutocomplate.name, UserAutocomplate)
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale, size: 'small' })
