@@ -27,3 +27,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function RefreshJwt() {
+  return request({
+    url: '/refreshjwt',
+    method: 'get'
+  })
+}

@@ -1,4 +1,4 @@
-import { login, getInfo } from '@/api/user'
+import { login, getInfo, RefreshJwt } from '@/api/user'
 import { getToken, setToken, removeToken, setRole, getRole } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -75,6 +75,13 @@ const actions = {
           commit('SET_ROLE', role)
           setRole(role)
           resolve({ roles: role, username, avatar, isSuper, permissions })
+          // 开始刷新jwt
+          window.setInterval(() => {
+            RefreshJwt().then(res => {
+              commit('SET_TOKEN', res.token)
+              setToken(res.token)
+            })
+          }, 60 * 1000)
         })
         .catch(error => {
           reject(error)

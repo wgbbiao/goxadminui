@@ -97,7 +97,9 @@ export default {
       })
     },
     handleUpdate(obj) {
-      this.$router.push({ name: this.editPage, params: { id: obj.id }})
+      this.$router.push({
+        name: this.editPage, params: { id: obj.id }
+      })
     },
     handleDelete(obj) {
       this.$confirm('此操作将永久删除该' + this.name + ', 是否继续?', '提示', {

@@ -63,7 +63,9 @@ export default {
     }
   },
   data() {
-    return { id: 0, formData: {}}
+    return {
+      id: 0, formData: {}
+    }
   },
   watch: {
     id(newval, oldval) {
@@ -103,7 +105,9 @@ export default {
             message: '保存成功',
             type: 'success'
           })
-          this.$router.push({ name: this.editPage, params: { id: r.data.id }})
+          this.$router.push({
+            name: this.editPage, params: { id: r.data.id }
+          })
         })
       } else {
         xadminUpdate(this.modelPath, this.id, data).then(r => {

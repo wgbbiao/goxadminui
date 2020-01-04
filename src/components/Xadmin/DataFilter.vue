@@ -52,11 +52,6 @@ export default {
       formData: {}
     }
   },
-  watch: {
-    formData: (newl) => {
-      console.log('eee')
-    }
-  },
   mounted() {
     this.formData = Object.assign({}, this.$route.query)
   },

@@ -271,7 +271,7 @@ module.exports = {
       }
     ],
     "space-before-blocks": [2, "always"],
-    "space-before-function-paren": [2, "never"],
+    "space-before-function-paren": ["error", "never"],
     "space-in-parens": [2, "never"],
     "space-infix-ops": 2,
     "space-unary-ops": [
@@ -308,7 +308,8 @@ module.exports = {
       2,
       "always",
       {
-        objectsInObjects: false
+        objectsInObjects: false,
+        arraysInObjects: false
       }
     ],
     "array-bracket-spacing": [2, "never"]
