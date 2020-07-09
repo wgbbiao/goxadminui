@@ -1,6 +1,7 @@
 <template>
   <ele-form :is-responsive="null"
             :is-show-reset-btn="true"
+            :submit-btn-text="'保存并继续'"
             :rules="rules"
             :form-desc="formDesc"
             :form-data="formData"
@@ -60,11 +61,18 @@ export default {
       default: function() {
         return []
       }
+    },
+    preloads: {
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   data() {
     return {
-      id: 0, formData: {}
+      id: 0,
+      formData: {}
     }
   },
   watch: {
@@ -81,8 +89,12 @@ export default {
   },
   methods: {
     GetDetail() {
-      xadminGetOne(this.modelPath, this.id).then(r => {
-        this.formData = GetFormDataFromRes(r.data, this.excludeFields)
+      const params = {}
+      if (this.preloads.length > 0) {
+        params.preloads = this.preloads.join(',')
+      }
+      xadminGetOne(this.modelPath, this.id, params).then(r => {
+        this.formData = GetFormDataFromRes(this.afterGet(r.data), this.excludeFields)
       }, err => {
         if (err.response.status === 403) {
           this.$message({
@@ -97,6 +109,9 @@ export default {
         }
       })
     },
+    saveData() {
+      this.handleRequest(this.formData)
+    },
     handleRequest(data) {
       data = this.preSave(data)
       if (this.id === 0) {
@@ -105,9 +120,12 @@ export default {
             message: '保存成功',
             type: 'success'
           })
-          this.$router.push({
-            name: this.editPage, params: { id: r.data.id }
-          })
+          if (this.editPage !== '') {
+            this.$router.push({
+              name: this.editPage,
+              params: { id: r.data.id }
+            })
+          }
         })
       } else {
         xadminUpdate(this.modelPath, this.id, data).then(r => {
@@ -115,6 +133,7 @@ export default {
             message: '保存成功',
             type: 'success'
           })
+          this.GetDetail()
         }, err => {
           if (err.response.status === 403) {
             this.$message({

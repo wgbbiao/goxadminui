@@ -1,15 +1,15 @@
 <template>
-  <el-select v-model="sid"
+  <el-select v-model="newValue"
              :remote-method="remoteMethod"
              :loading="loading"
              remote
-             placeholder="输入用户昵称"
+             :placeholder="desc.attrs.placeholder"
              filterable
              reserve-keyword
              @change="handleChange">
     <el-option v-for="(user, key) in filter_users"
                :key="key"
-               :label="user.nickname"
+               :label="user.mobile"
                :value="user.id" />
   </el-select>
 </template>
@@ -25,33 +25,21 @@ export default {
     event: 'change'
   },
   props: {
-    value: { type: Number, default: 0 },
-    // value 是传递过来的值
-    // desc是此组件的描述, 结构为
-    // { style: {}, class: {}, on: {}, attrs: {} }
-    desc: {
-      type: Object,
-      default() {
-        return {}
-      }
-    }
+    value: { type: Number, default: null }
   },
   data() {
     return {
-      sid: '',
       loading: false,
       filter_users: [],
-      newValue: this.value
+      newValue: ''
     }
   },
   methods: {
-    handleChange() {
-      this.$emit('change', this.sid)
-    },
     remoteMethod(query) {
+      this.sid = ''
       if (query !== '') {
         this.loading = true
-        xadminList('models/User', { nickname__like: query }).then(r => {
+        xadminList('models/User', { mobile__like: query }).then(r => {
           this.filter_users = r.list
           this.loading = false
         })

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <el-table :data="list"
+    <el-table ref="table"
+              v-loading="loading"
+              :data="list"
               border
               stripe>
       <el-table-column v-for="col in columns"
@@ -11,8 +13,7 @@
                        :formatter="col.formatter">
       </el-table-column>
       <el-table-column fixed="right"
-                       label="操作"
-                       width="100">
+                       label="操作">
         <template slot-scope="scope">
           <el-button v-if="canCreate"
                      size="mini"
@@ -22,12 +23,17 @@
                      size="mini"
                      type="text"
                      @click="handleDelete(scope.row)">删除</el-button>
+          <el-button v-for="(act,index) in actions"
+                     :key="index"
+                     type="text"
+                     @click="act.handel(scope.row)">{{ act.label }}</el-button>
+
         </template>
       </el-table-column>
     </el-table>
     <el-pagination :total="total"
-                   :current-page.sync="query.page"
-                   :page-size="100"
+                   :current-page.sync="$route.query.page"
+                   :page-size="20"
                    background
                    layout="total, prev, pager, next"
                    class="pagination"
@@ -73,12 +79,25 @@ export default {
     editPage: {
       type: String,
       default: ''
+    },
+    preloads: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    actions: {
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   data() {
     return {
       list: [],
-      total: 0, page: 1
+      total: 0,
+      page: 1, loading: false
     }
   },
   watch: {
@@ -91,9 +110,15 @@ export default {
   },
   methods: {
     GetList() {
-      xadminList(this.modelPath, this.$route.query).then(res => {
+      const query = Object.assign({}, this.$route.query)
+      if (this.preloads.length > 0) {
+        query.preloads = this.preloads.join(',')
+      }
+      this.loading = true
+      xadminList(this.modelPath, query).then(res => {
         this.list = res.list
         this.total = res.total
+        this.loading = false
       })
     },
     handleUpdate(obj) {

@@ -24,7 +24,9 @@ export function parseTime(time, cFormat) {
       } else {
         // support safari
         // https://stackoverflow.com/questions/4310953/invalid-date-in-safari
-        time = time.replace(new RegExp(/-/gm), '/')
+        if (time.indexOf('T') == -1) {
+          time = time.replace(new RegExp(/-/gm), '/')
+        }
       }
     }
 

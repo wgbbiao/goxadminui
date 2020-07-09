@@ -1,7 +1,6 @@
 <template>
   <el-breadcrumb class="app-breadcrumb"
                  separator="/">
-
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levelList"
                           :key="item.path">
@@ -15,19 +14,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import pathToRegexp from 'path-to-regexp'
+
 export default {
   data() {
     return {
-      levelList: null,
-      venues: []
+      levelList: null
     }
-  },
-  computed: {
-    ...mapGetters([
-      'isSuper'
-    ])
   },
   watch: {
     $route() {
@@ -44,7 +37,9 @@ export default {
       const first = matched[0]
 
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: 'Dashboard' }}].concat(matched)
+        matched = [{
+          path: '/dashboard', meta: { title: 'Dashboard' }
+        }].concat(matched)
       }
 
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
