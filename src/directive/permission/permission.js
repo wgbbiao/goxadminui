@@ -9,7 +9,6 @@ function PasePermission(appLabel, perms) {
 }
 export default {
   inserted(el, binding, vnode) {
-    console.log(binding)
     const { value } = binding
     const { appLabel, perms } = value
     const user_ermissions = PasePermission(appLabel, perms)

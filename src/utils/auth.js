@@ -26,15 +26,3 @@ export function setRole(role) {
 export function getRole() {
   return Cookies.get(RoleKey)
 }
-
-const VenueKey = 'vue_admin_template_venue'
-
-export function setVenue(vid) {
-  return Cookies.set(VenueKey, vid)
-}
-export function getVenue() {
-  return Cookies.get(VenueKey)
-}
-export function removeVenue() {
-  return Cookies.remove(VenueKey)
-}

@@ -121,7 +121,7 @@ export default {
             type: 'success'
           })
           if (this.editPage !== '') {
-            this.$router.push({
+            this.$router.replace({
               name: this.editPage,
               params: { id: r.data.id }
             })
