@@ -13,21 +13,33 @@
                        :formatter="col.formatter">
       </el-table-column>
       <el-table-column fixed="right"
+                       :width="actions.length>0 ? 151: 110"
                        label="操作">
         <template slot-scope="scope">
-          <el-button v-if="canCreate"
-                     size="mini"
-                     type="text"
-                     @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="canDelete"
-                     size="mini"
-                     type="text"
-                     @click="handleDelete(scope.row)">删除</el-button>
-          <el-button v-for="(act,index) in actions"
-                     :key="index"
-                     type="text"
-                     @click="act.handel(scope.row)">{{ act.label }}</el-button>
-
+          <el-button-group>
+            <el-button v-if="canCreate"
+                       size="mini"
+                       type="primary"
+                       icon="el-icon-edit"
+                       @click="handleUpdate(scope.row)"></el-button>
+            <el-button v-if="canDelete"
+                       size="mini"
+                       type="primary"
+                       icon="el-icon-delete"
+                       @click="handleDelete(scope.row)"></el-button>
+            <el-dropdown v-if="actions.length>0"
+                         trigger="click"
+                         @command="handleCommand">
+              <el-button type="primary"
+                         size="mini"
+                         icon="el-icon-menu"></el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="(act,key) in actions"
+                                  :key="key"
+                                  :command="()=>act.handel(scope.row)">{{ act.label }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -109,6 +121,10 @@ export default {
     this.GetList()
   },
   methods: {
+    handleCommand(f) {
+      // console.log('handleCommand')
+      f()
+    },
     GetList() {
       const query = Object.assign({}, this.$route.query)
       if (this.preloads.length > 0) {

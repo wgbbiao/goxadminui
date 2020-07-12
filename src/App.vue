@@ -20,4 +20,7 @@ export default {
 .datafilter .el-form-item {
   margin-bottom: 0;
 }
+th .cell {
+  text-align: center;
+}
 </style>
