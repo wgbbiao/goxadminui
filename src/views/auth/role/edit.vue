@@ -3,7 +3,10 @@
     <Edit :rules="rules"
           :form-desc="formDesc"
           :model-path="modelPath"
-          :pre-save="preSave"></Edit>
+          :preloads="['Permissions']"
+          edit-page="EditRole"
+          create-page="CreateRole"
+          :pre-save="preSave" />
   </div>
 </template>
 <script>
@@ -18,11 +21,13 @@ export default {
       formDesc: {
         name: {
           type: 'input',
-          label: '名称'
+          label: '名称',
+          required: true
         },
         permissions: {
           type: 'transfer',
           label: '权限',
+          required: true,
           options() {
             return new Promise((resolve, reject) => {
               xadminList('goxadmin/Permission', { '__all__': true }).then(res => {
@@ -45,7 +50,7 @@ export default {
   },
   methods: {
     preSave(data) {
-      if (data.permissions.length > 0) {
+      if (data.permissions && data.permissions.length > 0) {
         var permissions = []
         data.permissions.forEach(id => {
           permissions.push({ id: id })

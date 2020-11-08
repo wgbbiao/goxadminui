@@ -3,7 +3,7 @@
     <Edit :rules="rules"
           :form-desc="formDesc"
           :model-path="modelPath"
-          :pre-save="preSave"></Edit>
+          :pre-save="preSave" />
   </div>
 </template>
 <script>
@@ -18,7 +18,8 @@ export default {
       formDesc: {
         username: {
           type: 'input',
-          label: '用户名'
+          label: '用户名',
+          required: true
         },
         is_super: {
           type: 'switch',

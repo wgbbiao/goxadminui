@@ -3,15 +3,14 @@
     <data-filter :form-desc="formDesc"
                  :rules="rules"
                  name="角色"
-                 create-page="CreatePermission">
-    </data-filter>
+                 create-page="CreatePermission" />
     <list name="角色"
           style="margin-top:15px"
           model-path="goxadmin/Permission"
           :query="form"
           :columns="columns"
-          edit-page="EditPermission">
-    </list>
+          :preloads="['ContentType']"
+          edit-page="EditPermission" />
   </div>
 </template>
 <script>
@@ -38,6 +37,11 @@ export default {
       columns: [
         { id: 'name', label: '名称' },
         { id: 'code', label: '权限' },
+        {
+          id: 'content_type.model', label: '权限', formatter: (row, column) => {
+            return `${row.content_type.app_label}.${row.content_type.model}`
+          }
+        },
         {
           id: 'created_at', label: '添加时间', formatter: (row, column) => {
             if (row.created_at == null) {

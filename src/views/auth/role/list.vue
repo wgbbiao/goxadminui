@@ -3,15 +3,13 @@
     <data-filter :form-desc="formDesc"
                  :rules="rules"
                  name="角色"
-                 create-page="CreateRole">
-    </data-filter>
+                 create-page="CreateRole" />
     <list name="角色"
           style="margin-top:15px"
           model-path="goxadmin/Role"
           :query="form"
           :columns="columns"
-          edit-page="EditRole">
-    </list>
+          edit-page="EditRole" />
   </div>
 </template>
 <script>

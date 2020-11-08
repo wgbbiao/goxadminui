@@ -22,8 +22,8 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "vue": "2.6.10",
-    "vue-ele-form": "^0.8.25",
-    "vue-ele-form-image-uploader": "^0.1.6",
+    "vue-ele-form": "^0.8.52",
+    "vue-ele-form-image-uploader": "^0.1.8",
     "vue-ele-form-quill-editor": "^0.1.4",
     "vue-router": "3.0.6",
     "vuex": "3.1.0"

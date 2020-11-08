@@ -1,11 +1,9 @@
 <template>
-  <ele-form :is-responsive="null"
-            :is-show-reset-btn="true"
-            :submit-btn-text="'保存并继续'"
-            :rules="rules"
-            :form-desc="formDesc"
-            :form-data="formData"
-            :request-fn="handleRequest"></ele-form>
+  <ele-form v-model="formData"
+            v-bind="formConfig"
+            :request-fn="handleRequest"
+            :form-btns="formBtns"
+            @request-success="handleRequestSuccess" />
 </template>
 
 <script>
@@ -72,7 +70,37 @@ export default {
   data() {
     return {
       id: 0,
-      formData: {}
+      formData: {},
+      formConfig: {
+        isShowResetBtn: true,
+        submitBtnText: '保存',
+        formDesc: this.formDesc
+      },
+      act_type: 'back',
+      formBtns: [
+        {
+          text: '保存并增加另一个',
+          type: 'default',
+          attrs: {
+            disabled: false
+          },
+          click: () => {
+            this.act_type = 'create'
+            this.saveData()
+          }
+        },
+        {
+          text: '保存并继续编辑',
+          type: 'default',
+          attrs: {
+            disabled: false
+          },
+          click: () => {
+            this.act_type = 'continue'
+            this.saveData()
+          }
+        }
+      ]
     }
   },
   watch: {
@@ -89,6 +117,7 @@ export default {
   },
   methods: {
     GetDetail() {
+      this.act_type = 'back'
       const params = {}
       if (this.preloads.length > 0) {
         params.preloads = this.preloads.join(',')
@@ -112,6 +141,9 @@ export default {
     saveData() {
       this.handleRequest(this.formData)
     },
+    handleRequestSuccess() {
+      console.log('123')
+    },
     handleRequest(data) {
       data = this.preSave(data)
       if (this.id === 0) {
@@ -120,10 +152,32 @@ export default {
             message: '保存成功',
             type: 'success'
           })
-          if (this.editPage !== '') {
-            this.$router.replace({
-              name: this.editPage,
-              params: { id: r.data.id }
+          if (this.act_type === 'back') {
+            this.$router.back()
+          } else if (this.act_type === 'create') {
+            this.formData = {}
+          } else if (this.act_type === 'continue') {
+            if (this.editPage !== '') {
+              this.$router.replace({
+                name: this.editPage,
+                params: { id: r.data.id }
+              })
+            } else {
+              // 新建
+              this.formData = {}
+              // this.$route.back()
+            }
+          }
+        }, err => {
+          if (err.response.status === 403) {
+            this.$message({
+              message: `您无权限修改${this.modelName}`,
+              type: 'error'
+            })
+          } else {
+            this.$message({
+              message: '保存失败',
+              type: 'error'
             })
           }
         })
@@ -133,7 +187,16 @@ export default {
             message: '保存成功',
             type: 'success'
           })
-          this.GetDetail()
+          if (this.act_type === 'back') {
+            this.$router.back()
+          } else if (this.act_type === 'create') {
+            console.log(this.createPage)
+            this.$router.replace({
+              name: this.createPage
+            })
+          } else if (this.act_type === 'continue') {
+            this.GetDetail()
+          }
         }, err => {
           if (err.response.status === 403) {
             this.$message({
